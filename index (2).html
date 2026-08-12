@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maxi Mollompart — Video Editor</title>
+<meta name="description" content="Editor de video freelance. Edición, motion graphics y post para YouTube y contenido vertical.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-elev: #131313;
+    --fg: #edeae4;
+    --fg-dim: #8a8680;
+    --fg-mute: #4a4744;
+    --accent: #e8a857;
+    --line: #1f1e1c;
+    --radius: 2px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  a { color: inherit; text-decoration: none; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 24px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 100;
+    mix-blend-mode: difference;
+  }
+  nav .logo { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: #fff; }
+  nav ul { display: flex; gap: 32px; list-style: none; }
+  nav ul a { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; transition: opacity 0.2s; }
+  nav ul a:hover { opacity: 0.5; }
+
+  section { padding: 120px 40px; position: relative; border-top: 1px solid var(--line); }
+  section:first-of-type { border-top: none; }
+  .tc-marker {
+    position: absolute; top: 40px; left: 40px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .tc-marker::before {
+    content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 100px; padding-bottom: 100px; }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 48px;
+  }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(64px, 12vw, 190px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    margin-bottom: 40px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-role {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: 32px; border-top: 1px solid var(--line);
+    gap: 60px;
+  }
+  .hero-role p {
+    color: var(--fg-dim);
+    font-size: 16px;
+    max-width: 560px;
+  }
+  .hero-role p strong { color: var(--fg); font-weight: 500; }
+  .hero-role .role-label {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--fg);
+    white-space: nowrap;
+  }
+
+  .section-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 60px; padding-bottom: 24px; border-bottom: 1px solid var(--line);
+  }
+  .section-head h2 { font-family: 'Instrument Serif', serif; font-size: clamp(44px, 5.5vw, 76px); font-weight: 400; letter-spacing: -0.02em; }
+  .section-head h2 em { font-style: italic; color: var(--accent); }
+
+  /* LONG-FORM */
+  .yt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto; }
+  .yt-card { display: block; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .yt-card:hover:not(.is-playing) { transform: translateY(-6px); }
+  .yt-thumb {
+    aspect-ratio: 16/9; background: var(--bg-elev); border-radius: var(--radius);
+    overflow: hidden; position: relative; border: 1px solid var(--line);
+  }
+  .yt-thumb img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .yt-card:hover:not(.is-playing) .yt-thumb img { transform: scale(1.03); }
+  .yt-thumb::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55), transparent 45%);
+    pointer-events: none;
+  }
+  .yt-card.is-playing .yt-thumb::after { display: none; }
+  .yt-play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+    transition: transform 0.3s;
+  }
+  .yt-card:hover:not(.is-playing) .yt-play { transform: translate(-50%, -50%) scale(1.1); }
+  .yt-play svg { width: 24px; height: 24px; fill: var(--bg); margin-left: 3px; }
+  .yt-runtime {
+    position: absolute; bottom: 12px; right: 12px;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+    padding: 4px 8px; border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #fff;
+    z-index: 2;
+  }
+  .yt-thumb iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .yt-meta { display: flex; justify-content: space-between; gap: 20px; margin-top: 20px; }
+  .yt-title { font-size: 17px; font-weight: 500; line-height: 1.3; margin-bottom: 6px; max-width: 480px; }
+  .yt-client { color: var(--fg-dim); font-size: 13px; }
+  .yt-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--fg-dim);
+    padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+    align-self: flex-start; white-space: nowrap;
+  }
+
+  /* REELS */
+  .reels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 800px; margin: 0 auto; }
+  .reel-card { display: block; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reel-card:hover:not(.is-playing) { transform: translateY(-6px); }
+  .reel-visual {
+    aspect-ratio: 9/16; border-radius: var(--radius); overflow: hidden;
+    position: relative; border: 1px solid var(--line);
+    background:
+      radial-gradient(circle at 30% 20%, rgba(232, 168, 87, 0.15), transparent 50%),
+      linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  }
+  .reel-visual > img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reel-card:hover:not(.is-playing) .reel-visual > img { transform: scale(1.03); }
+  .reel-visual::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent 40%, transparent 70%, rgba(0,0,0,0.4));
+    pointer-events: none;
+  }
+  .reel-card.is-playing .reel-visual::after { display: none; }
+  .reel-card:hover:not(.is-playing) .reel-visual { border-color: var(--accent); }
+  .reel-card.is-playing .reel-visual { background: #000; }
+  .reel-top {
+    position: absolute; top: 20px; left: 20px; right: 20px;
+    display: flex; justify-content: space-between; z-index: 3;
+  }
+  .reel-top .mono { color: #fff; opacity: 0.85; }
+  .reel-play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(232, 168, 87, 0.95);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+    z-index: 3;
+  }
+  .reel-card:hover:not(.is-playing) .reel-play { transform: translate(-50%, -50%) scale(1.1); }
+  .reel-play svg { width: 22px; height: 22px; fill: var(--bg); margin-left: 3px; }
+  .reel-bottom {
+    position: absolute; bottom: 20px; left: 20px; right: 20px; z-index: 3;
+  }
+  .reel-bottom .reel-quote {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: 22px; line-height: 1.15; color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .reel-visual iframe { width: 100%; height: 100%; border: 0; display: block; position: relative; z-index: 4; }
+  .reel-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 20px; }
+  .reel-client { color: var(--fg-dim); font-size: 13px; }
+  .reel-client strong { color: var(--fg); font-weight: 500; display: block; margin-bottom: 2px; }
+
+  /* INFO */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .info-text h3 { font-family: 'Instrument Serif', serif; font-size: 40px; font-weight: 400; line-height: 1.15; margin-bottom: 32px; letter-spacing: -0.02em; }
+  .info-text h3 em { font-style: italic; color: var(--accent); }
+  .info-text p { color: var(--fg-dim); font-size: 16px; margin-bottom: 20px; max-width: 500px; }
+  .info-text p strong { color: var(--fg); font-weight: 500; }
+
+  .info-side { display: flex; flex-direction: column; gap: 40px; }
+  .info-block { border-top: 1px solid var(--line); padding-top: 20px; }
+  .info-block h4 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 16px; }
+  .tool-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tool { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; color: var(--fg); }
+
+  /* CONTACT */
+  .contact { text-align: center; padding: 160px 40px 120px; }
+  .contact .mono { margin-bottom: 40px; }
+  .contact-intro { color: var(--fg-dim); font-size: 16px; max-width: 480px; margin: 0 auto 40px; line-height: 1.5; }
+  .contact h2 { font-family: 'Instrument Serif', serif; font-size: clamp(56px, 9vw, 140px); font-weight: 400; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 60px; }
+  .contact h2 em { font-style: italic; color: var(--accent); }
+  .contact-links { display: inline-flex; flex-direction: column; gap: 0; }
+  .contact-link {
+    display: flex; align-items: center; justify-content: space-between; gap: 40px;
+    padding: 24px 32px; border-top: 1px solid var(--line);
+    min-width: 520px; transition: padding 0.3s, background 0.3s;
+    text-align: left;
+  }
+  .contact-link:last-child { border-bottom: 1px solid var(--line); }
+  .contact-link:hover { padding-left: 48px; background: var(--bg-elev); }
+  .contact-link-label { font-family: 'Instrument Serif', serif; font-size: 26px; font-style: italic; }
+  .contact-link-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fg-dim); letter-spacing: 0.06em; }
+
+  footer { padding: 40px; border-top: 1px solid var(--line); text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px; }
+    nav ul { display: none; }
+    section { padding: 80px 20px; }
+    .tc-marker { top: 20px; left: 20px; }
+    .hero { padding-top: 80px; padding-bottom: 60px; }
+    .hero-role { flex-direction: column; gap: 20px; align-items: flex-start; }
+    .yt-grid { grid-template-columns: 1fr; gap: 32px; }
+    .yt-meta { flex-direction: column; gap: 8px; }
+    .reels-grid { grid-template-columns: 1fr; gap: 32px; max-width: 340px; }
+    .info-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact { padding: 100px 20px 80px; }
+    .contact-link { min-width: 0; width: 100%; padding: 20px 16px; gap: 20px; }
+    .contact-link-label { font-size: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">MM/EDITOR</div>
+  <ul>
+    <li><a href="#work">Long-form</a></li>
+    <li><a href="#reels">Reels</a></li>
+    <li><a href="#info">Info</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="tc-marker"><span class="mono">TC 00:00:00:00</span></div>
+  <div class="container">
+    <div class="hero-top">
+      <span class="mono">Maxi Mollompart</span>
+      <span class="mono">Portfolio / 2026</span>
+    </div>
+    <h1>Editor de<br><em>video</em>.</h1>
+    <div class="hero-role">
+      <p>Edición, <strong>motion graphics</strong> y post para <strong>YouTube</strong> y contenido vertical. Cuatro años trabajando con creadores, coaches y podcasts.</p>
+      <span class="role-label">Freelance, disponible.</span>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="tc-marker"><span class="mono">TC 00:01:00:00 — LONG-FORM</span></div>
+  <div class="container">
+    <div class="section-head">
+      <h2><em>Long-form</em></h2>
+      <span class="mono">01 Trabajo</span>
+    </div>
+    <div class="yt-grid">
+
+      <div class="yt-card" data-vimeo-id="1217492074">
+        <div class="yt-thumb">
+          <img alt="" style="display:none">
+          <div class="yt-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="yt-runtime">13:00</div>
+        </div>
+        <div class="yt-meta">
+          <div>
+            <div class="yt-title">Cómo puedes hacer $10k con el Mundial 2026 (copiame)</div>
+            <div class="yt-client">Jim Gorlich · Coach de monetización en YouTube</div>
+          </div>
+          <span class="yt-tag">Long-form</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="reels">
+  <div class="tc-marker"><span class="mono">TC 00:14:00:00 — REELS</span></div>
+  <div class="container">
+    <div class="section-head">
+      <h2><em>Reels</em></h2>
+      <span class="mono">02 Trabajos</span>
+    </div>
+    <div class="reels-grid">
+
+      <div class="reel-card" data-vimeo-id="1217492076">
+        <div class="reel-visual">
+          <img alt="" style="display:none">
+          <div class="reel-top">
+            <span class="mono">R/01</span>
+            <span class="mono">9:16</span>
+          </div>
+          <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="reel-bottom">
+            <div class="reel-quote">"La IA más fácil de usar hasta el momento."</div>
+          </div>
+        </div>
+        <div class="reel-meta">
+          <div class="reel-client"><strong>Mirko Vigna</strong>Crecimiento en Instagram</div>
+        </div>
+      </div>
+
+      <div class="reel-card" data-vimeo-id="1217492075">
+        <div class="reel-visual">
+          <img alt="" style="display:none">
+          <div class="reel-top">
+            <span class="mono">R/02</span>
+            <span class="mono">9:16</span>
+          </div>
+          <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="reel-bottom">
+            <div class="reel-quote">"La nueva IA para hacer animaciones."</div>
+          </div>
+        </div>
+        <div class="reel-meta">
+          <div class="reel-client"><strong>Mirko Vigna</strong>Crecimiento en Instagram</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="info">
+  <div class="tc-marker"><span class="mono">TC 00:15:00:00 — INFO</span></div>
+  <div class="container">
+    <div class="info-grid">
+      <div class="info-text">
+        <h3>Cuatro años haciendo video. Del <em>corte</em> al motion graphics.</h3>
+        <p>Trabajo con creadores, coaches y podcasts que suben contenido seguido y necesitan que la edición no sea el cuello de botella.</p>
+        <p>Cubro todo el proceso: edición, motion graphics, color y sonido. También integro herramientas de <strong>IA</strong> como Seedance o Claude Code cuando sirven para producir más rápido o abrir posibilidades nuevas.</p>
+      </div>
+      <div class="info-side">
+        <div class="info-block">
+          <h4>Herramientas</h4>
+          <div class="tool-list">
+            <span class="tool">Premiere Pro</span>
+            <span class="tool">After Effects</span>
+            <span class="tool">Photoshop</span>
+            <span class="tool">CapCut</span>
+            <span class="tool">Seedance</span>
+            <span class="tool">Claude Code</span>
+          </div>
+        </div>
+        <div class="info-block">
+          <h4>Formatos</h4>
+          <div class="tool-list">
+            <span class="tool">YouTube long-form</span>
+            <span class="tool">Reels / TikTok</span>
+            <span class="tool">Motion graphics</span>
+            <span class="tool">Podcast edits</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="mono">TC 00:21:00:00 — CONTACTO</div>
+    <p class="contact-intro">Estos son algunos trabajos. Si querés ver más ejemplos o hablar de un proyecto, escribime.</p>
+    <h2>Trabajemos.</h2>
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:maximollompart@gmail.com">
+        <span class="contact-link-label">Mail</span>
+        <span class="contact-link-value">maximollompart@gmail.com →</span>
+      </a>
+      <a class="contact-link" href="https://wa.me/5493412604119" target="_blank" rel="noopener">
+        <span class="contact-link-label">WhatsApp</span>
+        <span class="contact-link-value">+54 341 260 4119 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Maxi Mollompart · Video Editor</span>
+</footer>
+
+<script>
+  // Load Vimeo thumbnails via oEmbed API
+  async function loadVimeoThumbnails() {
+    const cards = document.querySelectorAll('[data-vimeo-id]');
+    for (const card of cards) {
+      const id = card.dataset.vimeoId;
+      try {
+        const res = await fetch('https://vimeo.com/api/oembed.json?url=https://vimeo.com/' + id + '&width=1280');
+        const data = await res.json();
+        const img = card.querySelector('img');
+        if (img && data.thumbnail_url) {
+          img.src = data.thumbnail_url;
+          img.style.display = 'block';
+        }
+      } catch (e) {
+        console.warn('Vimeo thumbnail failed:', id);
+      }
+    }
+  }
+  loadVimeoThumbnails();
+
+  // Click to play Vimeo (long-form)
+  document.querySelectorAll('.yt-card').forEach(card => {
+    card.addEventListener('click', function() {
+      if (this.classList.contains('is-playing')) return;
+      const id = this.dataset.vimeoId;
+      const thumb = this.querySelector('.yt-thumb');
+      thumb.innerHTML = '<iframe src="https://player.vimeo.com/video/' + id + '?autoplay=1&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+      this.classList.add('is-playing');
+    });
+  });
+
+  // Click to play Vimeo (reels)
+  document.querySelectorAll('.reel-card').forEach(card => {
+    card.addEventListener('click', function() {
+      if (this.classList.contains('is-playing')) return;
+      const id = this.dataset.vimeoId;
+      const visual = this.querySelector('.reel-visual');
+      visual.innerHTML = '<iframe src="https://player.vimeo.com/video/' + id + '?autoplay=1&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+      this.classList.add('is-playing');
+    });
+  });
+
+  // Fade in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.yt-card, .reel-card, .info-block, .contact-link').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
