@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Maxi Mollompart — Video Editor</title>
-<meta name="description" content="Editor de video freelance. Edición, motion graphics y post para YouTube y contenido vertical.">
+<meta name="description" content="Editor de video freelance para creadores y coaches de habla hispana. YouTube long-form y contenido vertical, edición completa desde el crudo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,16 +52,16 @@
   nav ul a { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; transition: opacity 0.2s; }
   nav ul a:hover { opacity: 0.5; }
 
-  section { padding: 120px 40px; position: relative; border-top: 1px solid var(--line); }
+  section { padding: 120px 60px; position: relative; border-top: 1px solid var(--line); }
   section:first-of-type { border-top: none; }
   .tc-marker {
-    position: absolute; top: 40px; left: 40px;
+    position: absolute; top: 40px; left: 60px;
     display: flex; align-items: center; gap: 12px;
   }
   .tc-marker::before {
     content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
   }
-  .container { max-width: 1400px; margin: 0 auto; }
+  .container { max-width: 1680px; margin: 0 auto; }
 
   .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 100px; padding-bottom: 100px; }
   .hero-top {
@@ -69,7 +70,7 @@
   }
   .hero h1 {
     font-family: 'Instrument Serif', serif;
-    font-size: clamp(64px, 12vw, 190px);
+    font-size: clamp(64px, 14vw, 240px);
     line-height: 0.92;
     letter-spacing: -0.03em;
     font-weight: 400;
@@ -103,7 +104,7 @@
   .section-head h2 em { font-style: italic; color: var(--accent); }
 
   /* LONG-FORM */
-  .yt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto; }
+  .yt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
   .yt-card { display: block; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
   .yt-card:hover:not(.is-playing) { transform: translateY(-6px); }
   .yt-thumb {
@@ -150,7 +151,7 @@
   }
 
   /* REELS */
-  .reels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 800px; margin: 0 auto; }
+  .reels-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
   .reel-card { display: block; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
   .reel-card:hover:not(.is-playing) { transform: translateY(-6px); }
   .reel-visual {
@@ -201,6 +202,41 @@
   .reel-client { color: var(--fg-dim); font-size: 13px; }
   .reel-client strong { color: var(--fg); font-weight: 500; display: block; margin-bottom: 2px; }
 
+  /* SCOPE (qué hice en cada pieza) */
+  .yt-scope {
+    font-size: 12px;
+    color: var(--fg-mute);
+    line-height: 1.55;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    max-width: 640px;
+  }
+  .yt-scope::before {
+    content: 'SCOPE / ';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .reel-scope {
+    font-size: 11px;
+    color: var(--fg-mute);
+    line-height: 1.5;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+  .reel-scope::before {
+    content: 'SCOPE / ';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-right: 5px;
+  }
+
   /* INFO */
   .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
   .info-text h3 { font-family: 'Instrument Serif', serif; font-size: 40px; font-weight: 400; line-height: 1.15; margin-bottom: 32px; letter-spacing: -0.02em; }
@@ -233,6 +269,10 @@
   .contact-link-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fg-dim); letter-spacing: 0.06em; }
 
   footer { padding: 40px; border-top: 1px solid var(--line); text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @media (max-width: 1200px) {
+    .reels-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 800px; margin: 0 auto; }
+  }
 
   @media (max-width: 900px) {
     nav { padding: 20px; }
@@ -276,7 +316,7 @@
     </div>
     <h1>Editor de<br><em>video</em>.</h1>
     <div class="hero-role">
-      <p>Edición, <strong>motion graphics</strong> y post para <strong>YouTube</strong> y contenido vertical. Cuatro años trabajando con creadores, coaches y podcasts.</p>
+      <p>Editor para <strong>creadores y coaches de habla hispana</strong>. <strong>YouTube long-form</strong> y contenido vertical (Reels, TikTok). Edición completa desde el crudo: cortes, motion graphics, color y sonido.</p>
       <span class="role-label">Freelance, disponible.</span>
     </div>
   </div>
@@ -287,7 +327,7 @@
   <div class="container">
     <div class="section-head">
       <h2><em>Long-form</em></h2>
-      <span class="mono">01 Trabajo</span>
+      <span class="mono">02 Trabajos</span>
     </div>
     <div class="yt-grid">
 
@@ -299,11 +339,28 @@
         </div>
         <div class="yt-meta">
           <div>
-            <div class="yt-title">Cómo puedes hacer $10k con el Mundial 2026 (copiame)</div>
+            <div class="yt-title">Como hacer +10k antes del Mundial</div>
             <div class="yt-client">Jim Gorlich · Coach de monetización en YouTube</div>
           </div>
           <span class="yt-tag">Long-form</span>
         </div>
+        <p class="yt-scope">Edición completa desde el crudo del cliente. Cortes, ritmo, motion graphics, corrección de color y mezcla de sonido.</p>
+      </div>
+
+      <div class="yt-card" data-vimeo-id="1219642683">
+        <div class="yt-thumb">
+          <img alt="" style="display:none">
+          <div class="yt-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="yt-runtime">15:00</div>
+        </div>
+        <div class="yt-meta">
+          <div>
+            <div class="yt-title">Lo que YouTube NO te dice sobre desmonetización</div>
+            <div class="yt-client">Jim Gorlich · Coach de monetización en YouTube</div>
+          </div>
+          <span class="yt-tag">Long-form</span>
+        </div>
+        <p class="yt-scope">Edición completa desde el crudo del cliente. Cortes, ritmo, motion graphics, corrección de color y mezcla de sonido.</p>
       </div>
 
     </div>
@@ -315,7 +372,7 @@
   <div class="container">
     <div class="section-head">
       <h2><em>Reels</em></h2>
-      <span class="mono">02 Trabajos</span>
+      <span class="mono">04 Trabajos</span>
     </div>
     <div class="reels-grid">
 
@@ -334,6 +391,7 @@
         <div class="reel-meta">
           <div class="reel-client"><strong>Mirko Vigna</strong>Crecimiento en Instagram</div>
         </div>
+        <p class="reel-scope">Edición completa desde el crudo: cortes, motion, color y sonido.</p>
       </div>
 
       <div class="reel-card" data-vimeo-id="1217492075">
@@ -351,6 +409,43 @@
         <div class="reel-meta">
           <div class="reel-client"><strong>Mirko Vigna</strong>Crecimiento en Instagram</div>
         </div>
+        <p class="reel-scope">Edición completa desde el crudo: cortes, motion, color y sonido.</p>
+      </div>
+
+      <div class="reel-card" data-vimeo-id="1219640829">
+        <div class="reel-visual">
+          <img alt="" style="display:none">
+          <div class="reel-top">
+            <span class="mono">R/03</span>
+            <span class="mono">9:16</span>
+          </div>
+          <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="reel-bottom">
+            <div class="reel-quote">"La IA para recrear audios."</div>
+          </div>
+        </div>
+        <div class="reel-meta">
+          <div class="reel-client"><strong>The Line Project</strong>Contenido con IA · 56K+ IG</div>
+        </div>
+        <p class="reel-scope">Edición completa desde el crudo: cortes, motion, color y sonido.</p>
+      </div>
+
+      <div class="reel-card" data-vimeo-id="1219640828">
+        <div class="reel-visual">
+          <img alt="" style="display:none">
+          <div class="reel-top">
+            <span class="mono">R/04</span>
+            <span class="mono">9:16</span>
+          </div>
+          <div class="reel-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="reel-bottom">
+            <div class="reel-quote">"Cómo crear UGC con IA."</div>
+          </div>
+        </div>
+        <div class="reel-meta">
+          <div class="reel-client"><strong>The Line Project</strong>Contenido con IA · 56K+ IG</div>
+        </div>
+        <p class="reel-scope">Edición completa desde el crudo: cortes, motion, color y sonido.</p>
       </div>
 
     </div>
@@ -363,8 +458,8 @@
     <div class="info-grid">
       <div class="info-text">
         <h3>Cuatro años haciendo video. Del <em>corte</em> al motion graphics.</h3>
-        <p>Trabajo con creadores, coaches y podcasts que suben contenido seguido y necesitan que la edición no sea el cuello de botella.</p>
-        <p>Cubro todo el proceso: edición, motion graphics, color y sonido. También integro herramientas de <strong>IA</strong> como Seedance o Claude Code cuando sirven para producir más rápido o abrir posibilidades nuevas.</p>
+        <p>Trabajo con <strong>creadores, coaches e infoproductores</strong> de habla hispana que suben contenido seguido en YouTube, Instagram y TikTok, y necesitan un editor que resuelva de punta a punta.</p>
+        <p>Cubro todo el proceso desde el crudo: edición, motion graphics, color y sonido. Guion y thumbnails los deja el cliente. También integro herramientas de <strong>IA</strong> como Seedance o Claude Code cuando sirven para producir más rápido o abrir posibilidades nuevas.</p>
       </div>
       <div class="info-side">
         <div class="info-block">
