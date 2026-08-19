@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -77,6 +76,33 @@
     margin-bottom: 40px;
   }
   .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-stats {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(40px, 6vw, 90px);
+    margin: 32px 0 48px;
+    padding: 32px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-stat-item { display: flex; flex-direction: column; gap: 8px; }
+  .hero-stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(64px, 9vw, 130px);
+    line-height: 0.9;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+  }
+  .hero-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    max-width: 160px;
+    line-height: 1.4;
+  }
   .hero-role {
     display: flex; justify-content: space-between; align-items: baseline;
     padding-top: 32px; border-top: 1px solid var(--line);
@@ -102,6 +128,16 @@
   }
   .section-head h2 { font-family: 'Instrument Serif', serif; font-size: clamp(44px, 5.5vw, 76px); font-weight: 400; letter-spacing: -0.02em; }
   .section-head h2 em { font-style: italic; color: var(--accent); }
+  .section-intro {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(18px, 1.6vw, 22px);
+    color: var(--fg-dim);
+    margin-bottom: 48px;
+    max-width: 620px;
+    line-height: 1.4;
+  }
+  .section-intro strong { color: var(--fg); font-weight: 400; font-style: normal; }
 
   /* LONG-FORM */
   .yt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
@@ -280,6 +316,7 @@
     section { padding: 80px 20px; }
     .tc-marker { top: 20px; left: 20px; }
     .hero { padding-top: 80px; padding-bottom: 60px; }
+    .hero-stats { gap: 32px; padding: 24px 0; margin: 24px 0 32px; flex-wrap: wrap; }
     .hero-role { flex-direction: column; gap: 20px; align-items: flex-start; }
     .yt-grid { grid-template-columns: 1fr; gap: 32px; }
     .yt-meta { flex-direction: column; gap: 8px; }
@@ -315,8 +352,22 @@
       <span class="mono">Portfolio / 2026</span>
     </div>
     <h1>Editor de<br><em>video</em>.</h1>
+    <div class="hero-stats">
+      <div class="hero-stat-item">
+        <span class="hero-stat-num">+100</span>
+        <span class="hero-stat-label">videos editados</span>
+      </div>
+      <div class="hero-stat-item">
+        <span class="hero-stat-num">+4</span>
+        <span class="hero-stat-label">años de experiencia</span>
+      </div>
+      <div class="hero-stat-item">
+        <span class="hero-stat-num">ES</span>
+        <span class="hero-stat-label">creadores de habla hispana</span>
+      </div>
+    </div>
     <div class="hero-role">
-      <p>Editor para <strong>creadores y coaches de habla hispana</strong>. <strong>YouTube long-form</strong> y contenido vertical (Reels, TikTok). Edición completa desde el crudo: cortes, motion graphics, color y sonido.</p>
+      <p><strong>YouTube long-form</strong> y contenido vertical (Reels, TikTok). Edición completa desde el crudo: cortes, motion graphics, color y sonido.</p>
       <span class="role-label">Freelance, disponible.</span>
     </div>
   </div>
@@ -327,8 +378,9 @@
   <div class="container">
     <div class="section-head">
       <h2><em>Long-form</em></h2>
-      <span class="mono">02 Trabajos</span>
+      <span class="mono">Selección — 02</span>
     </div>
+    <p class="section-intro">Una muestra de <strong>trabajos recientes</strong>. Más disponibles a pedido.</p>
     <div class="yt-grid">
 
       <div class="yt-card" data-vimeo-id="1217492074">
@@ -372,8 +424,9 @@
   <div class="container">
     <div class="section-head">
       <h2><em>Reels</em></h2>
-      <span class="mono">04 Trabajos</span>
+      <span class="mono">Selección — 04</span>
     </div>
+    <p class="section-intro">Algunos <strong>Reels recientes</strong>. Más disponibles a pedido.</p>
     <div class="reels-grid">
 
       <div class="reel-card" data-vimeo-id="1217492076">
@@ -457,7 +510,7 @@
   <div class="container">
     <div class="info-grid">
       <div class="info-text">
-        <h3>Cuatro años haciendo video. Del <em>corte</em> al motion graphics.</h3>
+        <h3>Del <em>corte</em> al motion graphics.</h3>
         <p>Trabajo con <strong>creadores, coaches e infoproductores</strong> de habla hispana que suben contenido seguido en YouTube, Instagram y TikTok, y necesitan un editor que resuelva de punta a punta.</p>
         <p>Cubro todo el proceso desde el crudo: edición, motion graphics, color y sonido. Guion y thumbnails los deja el cliente. También integro herramientas de <strong>IA</strong> como Seedance o Claude Code cuando sirven para producir más rápido o abrir posibilidades nuevas.</p>
       </div>
